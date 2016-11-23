@@ -1,0 +1,26 @@
+{
+  "name": "movie-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "karma start karma.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flashjpr/movieApp.git"
+  },
+  "author": "Mihai Fleseriu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flashjpr/movieApp/issues"
+  },
+  "homepage": "https://github.com/flashjpr/movieApp#readme",
+  "devDependencies": {
+    "jasmine-core": "^2.5.2",
+    "karma": "^1.3.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-phantomjs-launcher": "^1.0.2"
+  }
+}
