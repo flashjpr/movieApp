@@ -63,4 +63,19 @@ describe('MovieCore', function () {
         expect($httpBackend.flush).not.toThrow();
     })
 
+    it('should authenticate requests', function () {
+        // "authToken": "ceSaMaiSpunaSiCopiiiAstia", "Accept": "application/json, text/plain, */*"
+
+        // var expectedHeaders = function (headers) {
+        //     return angular.fromJson(headers).authToken === 'ceSaMaiSpunaSiCopiiiAstia';
+        // };
+        var expectedHeaders = {"authToken": "ceSaMaiSpunaSiCopiiiAstia", "Accept": "application/json, text/plain, */*"}
+        $httpBackend.expectGET('popular/tt0076759', expectedHeaders)
+            .respond(200)
+
+        popularMovies.get({ movieId : 'tt0076759'})
+
+        $httpBackend.flush(1);
+    })
+
 });
