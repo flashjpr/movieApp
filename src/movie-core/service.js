@@ -14,7 +14,8 @@
         var token = 'ceSaMaiSpunaSiCopiiiAstia';
         return $resource('popular/:movieId', {movie: '@id'}, {
             update: {
-                method: 'PUT'
+                method: 'PUT',
+                headers: {'authToken': token }
             },
             get: {
                 method: 'GET',

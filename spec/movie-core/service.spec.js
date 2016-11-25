@@ -7,7 +7,7 @@ describe('MovieCore', function () {
     var $httpBackend;
 
     beforeEach(module('movieCore'));
-    
+
     beforeEach(inject(function (_popularMovies_, _$httpBackend_) {
         popularMovies = _popularMovies_;
         $httpBackend = _$httpBackend_;
@@ -15,6 +15,7 @@ describe('MovieCore', function () {
 
     afterEach(function () {
         $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
     });
 
     it('should create popular movie', function () {
@@ -65,16 +66,39 @@ describe('MovieCore', function () {
 
     it('should authenticate requests', function () {
         // "authToken": "ceSaMaiSpunaSiCopiiiAstia", "Accept": "application/json, text/plain, */*"
+        var headerData = function (headers) {
+            return headers.authToken === 'ceSaMaiSpunaSiCopiiiAstia';
+        };
+        var matchAny = /.*/;
 
-        // var expectedHeaders = function (headers) {
-        //     return angular.fromJson(headers).authToken === 'ceSaMaiSpunaSiCopiiiAstia';
-        // };
-        var expectedHeaders = {"authToken": "ceSaMaiSpunaSiCopiiiAstia", "Accept": "application/json, text/plain, */*"}
-        $httpBackend.expectGET('popular/tt0076759', expectedHeaders)
+        // re-used (1)
+        $httpBackend.whenGET(matchAny, headerData)
+            .respond(200);
+
+        // not re-used
+        $httpBackend.expectPOST(matchAny, matchAny, headerData)
+            .respond(200);
+
+        $httpBackend.expectPUT(matchAny, matchAny, headerData)
+            .respond(200);
+
+        $httpBackend.expectDELETE(matchAny, headerData)
             .respond(200)
 
-        popularMovies.get({ movieId : 'tt0076759'})
+        var popularMovie = {id: 'tt0076759', description: 'Cool movie, best that I have seen'};
 
+        popularMovies.query();// (1) here
+        popularMovies.get({ id : 'tt0076759'});// (1) and here
+
+        new popularMovies(popularMovie).$save();
+        new popularMovies(popularMovie).$update();
+        new popularMovies(popularMovie).$remove();
+
+        // we have 5 requests that we need to resolve : 2 whenGET and rest 3 EXPECTs
+        $httpBackend.flush(1);
+        $httpBackend.flush(1);
+        $httpBackend.flush(1);
+        $httpBackend.flush(1);
         $httpBackend.flush(1);
     })
 
