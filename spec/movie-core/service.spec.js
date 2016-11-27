@@ -62,7 +62,7 @@ describe('MovieCore', function () {
 
         popularMovie.$update();
         expect($httpBackend.flush).not.toThrow();
-    })
+    });
 
     it('should authenticate requests', function () {
         // "authToken": "ceSaMaiSpunaSiCopiiiAstia", "Accept": "application/json, text/plain, */*"
@@ -83,7 +83,7 @@ describe('MovieCore', function () {
             .respond(200);
 
         $httpBackend.expectDELETE(matchAny, headerData)
-            .respond(200)
+            .respond(200);
 
         var popularMovie = {id: 'tt0076759', description: 'Cool movie, best that I have seen'};
 
@@ -94,12 +94,7 @@ describe('MovieCore', function () {
         new popularMovies(popularMovie).$update();
         new popularMovies(popularMovie).$remove();
 
-        // we have 5 requests that we need to resolve : 2 whenGET and rest 3 EXPECTs
-        $httpBackend.flush(1);
-        $httpBackend.flush(1);
-        $httpBackend.flush(1);
-        $httpBackend.flush(1);
-        $httpBackend.flush(1);
+        expect($httpBackend.flush).not.toThrow();
     })
 
 });
