@@ -26,19 +26,48 @@ describe('Results Controller', function () {
         ]
     };
     var $controller;
+    var $location;
+    var $q;
+    var $rootScope;
+    var omdbApi;
     var $scope;
 
+    beforeEach(module('omdb'));
     beforeEach(module('movieApp'));
 
-    beforeEach(inject(function (_$controller_) {
+    beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _omdbApi_, _$location_) {
         $controller = _$controller_;
+        $q = _$q_;
+        $rootScope = _$rootScope_;
+        omdbApi = _omdbApi_;
+        $location = _$location_;
         $scope = {};
     }));
 
     it('should load search results', function () {
+        
+        spyOn(omdbApi, 'search').and.callFake(function () {
+           var deferred = $q.defer();
+           deferred.resolve(results);
+           return deferred.promise;
+        });
+        $location.search('q', 'star wars');
         $controller('ResultsController', {$scope: $scope});
-        expect($scope.results[0].data.Title).toBe(results.Search[0].Title);
-        expect($scope.results[1].data.Title).toBe(results.Search[1].Title);
-        expect($scope.results[2].data.Title).toBe(results.Search[2].Title);
+        $rootScope.$apply();
+        expect($scope.results[0].Title).toBe(results.Search[0].Title);
+        expect($scope.results[1].Title).toBe(results.Search[1].Title);
+        expect($scope.results[2].Title).toBe(results.Search[2].Title);
+    });
+
+    it('should set result status to error', function () {
+        spyOn(omdbApi, 'search').and.callFake(function () {
+            var deferred = $q.defer();
+            deferred.reject();
+            return deferred.promise;
+        });
+        $location.search('q', 'star wars');
+        $controller('ResultsController', {$scope: $scope});
+        $rootScope.$apply();
+        expect($scope.errorMessage).toBe('Something went wrong');
     });
 });
