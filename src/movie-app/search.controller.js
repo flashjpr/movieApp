@@ -5,7 +5,7 @@
     'use strict';
 
     angular
-        .module('movieApp', [])
+        .module('movieApp')
         .controller('SearchController', SearchController);
 
     SearchController.$inject = ['$location'];
