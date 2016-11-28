@@ -22,7 +22,7 @@
             <div ng-controller="SearchController as vm">
                 <form ng-submit="vm.search()" class="form-inline-lg">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Movie title" ng-model="vm.query">
+                        <input type="text" class="form-control" placeholder="Movie title" ng-model="vm.query" ng-keyup="vm.keyup()" ng-keydown="vm.keydown()">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" ng-click="vm.search()">Search</button>
                         </span>
